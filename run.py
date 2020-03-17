@@ -1,9 +1,11 @@
 import discord
 from discord.ext import commands
 import configparser
+import os
+import sys
 
 config = configparser.ConfigParser()
-config.read('/mnt/c/Users/Matthew Cecil/projects/d-bot/config/main.ini')
+config.read(os.environ['D_BOT_CONFIG'] + 'main.ini')
 
 token = config['discord']['token']
 
