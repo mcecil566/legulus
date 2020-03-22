@@ -6,7 +6,7 @@ import sys
 import random
 
 config = configparser.ConfigParser()
-config.read(os.environ['D_BOT_CONFIG'] + 'main.ini')
+config.read(os.environ['D_BOT_CFG'] + 'main.ini')
 
 token = config['discord']['token']
 
@@ -27,6 +27,10 @@ async def on_member_remove(member):
 @client.command()
 async def ping(ctx):
     await ctx.send(f'pong {round(client.latency * 1000)} ms')
+
+@client.command()
+async def clear(ctx, amount=5):
+    await ctx.channel.purge(limit=amount)
 
 @client.command()
 async def setlastfm(ctx, account_name):
