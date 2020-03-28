@@ -62,7 +62,7 @@ class Database:
         except Exception as e:
             log.error(e)
         
-    def add_lastfm_account(self, discord_account, lastfm_account):
+    def add_account(self, discord_account, lastfm_account):
         # add row to db with discord account and lastfm account if it doesn't exist
 
         try:
@@ -81,8 +81,26 @@ class Database:
 
         except Exception as e:
             log.error(e)
+    
+    def delete_row(self, user_id):
+        # delete a row in the discord_user table
 
-# db = Database('d_bot')
+        try:
+            cursor = self.db_connection.cursor()
 
-# conn = db.connect()
+            delete_row_query = "DELETE FROM discord_user WHERE user_id = '{user_id}'".format(
+                user_id=user_id
+            )
+
+            cursor.execute(delete_row_query)
+            self.db_connection.commit()
+
+            cursor.close()
+        
+        except Exception as e:
+            log.error(e)
+
+db = Database('d_bot')
+
+conn = db.connect()
 # update = db.update_lastfm_account('test_account_1', 'modified_account')
