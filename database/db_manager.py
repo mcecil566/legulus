@@ -94,6 +94,7 @@ class Database:
 
             cursor.execute(delete_row_query)
             self.db_connection.commit()
+            log.info('Deleted row: {}'.format(user_id))
 
             cursor.close()
         
