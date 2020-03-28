@@ -1,6 +1,10 @@
 import configparser
 import os
 import psycopg2
+import logging
+import sys
+
+log = logging.getLogger(__name__)
 
 class Database:
     
@@ -12,18 +16,68 @@ class Database:
         self.db_user = self.config['postgre_sql']['username']
         self.db_pw = self.config['postgre_sql']['password']
         self.db_port = self.config['postgre_sql']['port']
-        self.database = database
+        self.db_database = database
     
     def connect(self):
-        self.db_connection = psycopg2.connect(
-            database=self.database,
-            user=self.db_user,
-            password=self.db_pw,
-            host=self.db_host,
-            port=self.db_port
-        )
-        return self.db_connection
+        try:
+            self.db_connection = psycopg2.connect(
+                host=self.db_host,
+                user=self.db_user,
+                password=self.db_pw,
+                database=self.db_database,
+                port=self.db_port
+            )
+            return self.db_connection
+            log.info('Successfully connected to PostgreSQL database.')
 
-db = Database('d_bot_db')
-print(db.db_host)
+        except Exception as e:
+            log.error('Could not connect to PostgreSQL database.')
+            log.error(e)
+            sys.exit()
+
+    def update_lastfm_account(self, discord_account, lastfm_account):
+        # check to see if we already have a discord account
+        
+        cursor = self.db_connection.cursor()
+
+        cursor.execute('SELECT * FROM discord_user')
+        result = cursor.fetchall()
+        
+        for row in result:
+            if discord_account in row[1]:
+                update_user_query = "UPDATE discord_user SET lastfm_account = '{lastfm_account}' WHERE user_id = '{user_id}'".format(
+                    lastfm_account=lastfm_account,
+                    user_id=row[0]
+                )
+
+                cursor.execute(update_user_query)
+                self.db_connection.commit()
+                log.info('Updated row: {}'.format(row[0]))
+            else:
+                pass
+
+        cursor.close()
+        
+    def add_lastfm_account(self, discord_account, lastfm_account):
+        # add row to db with discord account and lastfm account if it doesn't exist
+
+        cursor = self.db_connection.cursor()
+
+        try:
+            insert_user_query = "INSERT INTO discord_user (discord_account, lastfm_account) VALUES ('{discord_account}', '{lastfm_account}')".format(
+                discord_account=discord_account,
+                lastfm_account=lastfm_account
+            )
+            cursor.execute(insert_user_query)
+            
+            cursor.execute('SELECT * FROM discord_user')
+            result = cursor.fetchall()
+            print(result)
+
+        except Exception as e:
+            print(e)
+
+db = Database('d_bot')
+
 conn = db.connect()
+c = db.update_lastfm_account('test_account_1', 'small_test')
