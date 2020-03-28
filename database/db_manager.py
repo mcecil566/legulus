@@ -54,6 +54,7 @@ class Database:
                 self.db_connection.commit()
                 log.info('Updated row: {}'.format(row[0]))
             else:
+                log.info('No row found')
                 pass
 
         cursor.close()
@@ -68,11 +69,10 @@ class Database:
                 discord_account=discord_account,
                 lastfm_account=lastfm_account
             )
+
             cursor.execute(insert_user_query)
-            
-            cursor.execute('SELECT * FROM discord_user')
-            result = cursor.fetchall()
-            print(result)
+            self.db_connection.commit()
+            log.info('Added row: {}'.format(discord_account))
 
         except Exception as e:
             print(e)
@@ -80,4 +80,4 @@ class Database:
 db = Database('d_bot')
 
 conn = db.connect()
-c = db.update_lastfm_account('test_account_1', 'small_test')
+update = db.update_lastfm_account('test_account_1', 'small_test')
