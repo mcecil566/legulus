@@ -9,11 +9,7 @@ class Commands(commands.Cog):
 
     @commands.command()
     async def ping(self, ctx):
-        await ctx.send('Pong')
-
-    @commands.command()
-    async def ping(self, ctx):
-        await ctx.send(f'pong {round(client.latency * 1000)} ms')
+        await ctx.send(f'pong {round(self.client.latency * 1000)} ms')
 
     @commands.command()
     async def clear(self, ctx, amount=5):
