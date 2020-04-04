@@ -15,12 +15,6 @@ class Commands(commands.Cog):
     async def clear(self, ctx, amount=5):
         await ctx.channel.purge(limit=amount)
 
-    # @commands.command()
-    # async def setlastfm(self, ctx, account_name):
-    #     print(ctx.author)
-    #     print(account_name)
-    #     #await ctx.send('LastFm set!')
-
     @commands.command(aliases=['8ball'])
     async def _8ball(self, ctx, *, question):
         responses = ["As I see it, yes.",

@@ -5,7 +5,8 @@ import os
 
 startup_extensions = [
     'bot_commands',
-    'bot_events']
+    'bot_events',
+    'lastfm_commands']
 
 config = configparser.ConfigParser()
 config.read(os.environ['D_BOT_CFG'] + 'main.ini')
