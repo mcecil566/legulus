@@ -2,9 +2,6 @@ import discord
 from discord.ext import commands
 import configparser
 import os
-import sys
-import random
-from cogs import *
 
 startup_extensions = [
     'bot_commands',
