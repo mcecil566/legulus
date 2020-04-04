@@ -102,7 +102,7 @@ class Database:
         except Exception as e:
             log.error(e)
 
-db = Database('d_bot')
+# db = Database('d_bot')
 
-conn = db.connect()
+# conn = db.connect()
 # update = db.update_lastfm_account('test_account_1', 'modified_account')
