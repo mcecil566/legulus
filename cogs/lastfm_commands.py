@@ -13,6 +13,8 @@ class LastfmCommands(commands.Cog):
         self.db_connection = self.db.connect()
     
     @commands.command()
+    # set user lastfm account in postgres database or update if we already
+    # have an entry based on user input
     async def setlastfm(self, ctx, lastfm_account_name):
         d_user = str(ctx.author)
         d_user_readable = d_user.split('#')[0]

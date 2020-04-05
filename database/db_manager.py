@@ -19,6 +19,8 @@ class Database:
         self.db_database = database
     
     def connect(self):
+        # connect to the postgres database
+
         try:
             self.db_connection = psycopg2.connect(
                 host=self.db_host,
@@ -35,7 +37,8 @@ class Database:
             log.error(e)
 
     def update_lastfm_account(self, discord_id, lastfm_account):
-        # check to see if we already have a discord account
+        # check to see if we already have a discord account id and
+        # update the lastfm account if we do
 
         try:
             cursor = self.db_connection.cursor()
@@ -63,7 +66,8 @@ class Database:
             log.error(e)
         
     def add_account(self, discord_account, discord_id, lastfm_account):
-        # add row to db with discord account and lastfm account if it doesn't exist
+        # add row to db with discord account, discord account id and
+        # lastfm account if it doesn't exist
 
         try:
             cursor = self.db_connection.cursor()
