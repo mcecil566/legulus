@@ -4,6 +4,8 @@ import sys
 import os
 sys.path.append(os.environ['DB_PATH'])
 from db_manager import Database
+sys.path.append(os.environ['API_PATH'])
+from lastfm import LastFm
 
 class LastfmCommands(commands.Cog):
 
@@ -11,6 +13,7 @@ class LastfmCommands(commands.Cog):
         self.client = client
         self.db = Database('d_bot')
         self.db_connection = self.db.connect()
+        self.lastfm = LastFm()
     
     @commands.command()
     # set user lastfm account in postgres database or update if we already
@@ -40,6 +43,32 @@ class LastfmCommands(commands.Cog):
                 discord_account=d_user_readable,
                 lastfm_account=lastfm_account_name
             ))
+    
+    @commands.command()
+    # now playing
+    async def np(self, ctx):
+        d_user = str(ctx.author)
+        d_user_readable = d_user.split('#')[0]
+        d_user_id = str(ctx.author.id)
+
+        if self.db.get_lastfm_username(d_user_id) is not None:
+            lastfm_username = self.db.get_lastfm_username(d_user_id)
+            if self.lastfm.now_playing(lastfm_username) is not None:
+                recent_tracks = self.lastfm.now_playing(lastfm_username)
+            
+                await ctx.send(recent_tracks)
+            else:
+                await ctx.send('Invalid response from LastFm API!')
+
+        else:
+            await ctx.send('Unable to find LastFm account for {d_user_readable}!'.format(
+                d_user_readable=d_user_readable
+            ))
+
+        # fm.format_query
+        # fm.now_playing
+        # ctx.send(result)
+        pass
 
 def setup(client):
     client.add_cog(LastfmCommands(client))

@@ -87,6 +87,27 @@ class Database:
         except Exception as e:
             log.error(e)
     
+    def get_lastfm_username(self, discord_id):
+        # get lastfm username based on discord_id
+        
+        try:
+            cursor = self.db_connection.cursor()
+
+            get_user_query = "SELECT lastfm_account FROM discord_user WHERE discord_id = '{discord_id}'".format(
+                discord_id=discord_id
+            )
+
+            cursor.execute(get_user_query)
+            result = cursor.fetchall()[0][0]
+            cursor.close()
+
+            return result
+        
+        except Exception as e:
+            log.error(e)
+            log.error('Unable to find lastfm account')
+
+    
     def delete_row(self, user_id):
         # delete a row in the discord_user table
 
