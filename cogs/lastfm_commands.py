@@ -45,12 +45,13 @@ class LastfmCommands(commands.Cog):
             ))
     
     @commands.command()
-    # now playing
+    # now playing, get last 4 songs played, plus metadata
     async def np(self, ctx):
         d_user = str(ctx.author)
         d_user_readable = d_user.split('#')[0]
         d_user_id = str(ctx.author.id)
 
+        # make sure we have a lastfm username
         if self.db.get_lastfm_username(d_user_id) is not None:
             lastfm_username = self.db.get_lastfm_username(d_user_id)
             if self.lastfm.now_playing(lastfm_username) is not None:
@@ -58,7 +59,7 @@ class LastfmCommands(commands.Cog):
             
                 await ctx.send(recent_tracks)
             else:
-                await ctx.send('Invalid response from LastFm API!')
+                await ctx.send('Unable to pull latest tracks :(')
 
         else:
             await ctx.send('Unable to find LastFm account for {d_user_readable}!'.format(
