@@ -66,10 +66,5 @@ class LastfmCommands(commands.Cog):
                 d_user_readable=d_user_readable
             ))
 
-        # fm.format_query
-        # fm.now_playing
-        # ctx.send(result)
-        pass
-
 def setup(client):
     client.add_cog(LastfmCommands(client))
